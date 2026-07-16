@@ -40,23 +40,37 @@
 
         <div class="grid-controls">
           <div class="input-group">
-            <label for="model">AI Model</label>
-            <select id="model">
-              <option value="flux" selected>Flux (Best Quality)</option>
-              <option value="flux-realism">Flux Realism (Photo-Real)</option>
-              <option value="turbo">Turbo (Ultra Fast)</option>
-              <option value="anime">Anime Style</option>
-              <option value="3d-model">3D Render</option>
-            </select>
+            <label>AI Model</label>
+            <div class="custom-select" id="model-select">
+              <div class="select-trigger">
+                <span class="selected-value">Flux (Best Quality)</span>
+                <i data-lucide="chevron-down" class="select-arrow"></i>
+              </div>
+              <div class="select-options hidden">
+                <div class="select-option selected" data-value="flux">Flux (Best Quality)</div>
+                <div class="select-option" data-value="flux-realism">Flux Realism (Photo-Real)</div>
+                <div class="select-option" data-value="turbo">Turbo (Ultra Fast)</div>
+                <div class="select-option" data-value="anime">Anime Style</div>
+                <div class="select-option" data-value="3d-model">3D Render</div>
+              </div>
+              <input type="hidden" id="model" value="flux" />
+            </div>
           </div>
 
           <div class="input-group">
-            <label for="aspect-ratio">Aspect Ratio</label>
-            <select id="aspect-ratio">
-              <option value="1:1" selected>Square (1:1)</option>
-              <option value="16:9">Landscape (16:9)</option>
-              <option value="9:16">Portrait (9:16)</option>
-            </select>
+            <label>Aspect Ratio</label>
+            <div class="custom-select" id="ratio-select">
+              <div class="select-trigger">
+                <span class="selected-value">Square (1:1)</span>
+                <i data-lucide="chevron-down" class="select-arrow"></i>
+              </div>
+              <div class="select-options hidden">
+                <div class="select-option selected" data-value="1:1">Square (1:1)</div>
+                <div class="select-option" data-value="16:9">Landscape (16:9)</div>
+                <div class="select-option" data-value="9:16">Portrait (9:16)</div>
+              </div>
+              <input type="hidden" id="aspect-ratio" value="1:1" />
+            </div>
           </div>
         </div>
 

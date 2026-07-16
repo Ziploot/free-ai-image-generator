@@ -27,6 +27,55 @@ document.addEventListener('DOMContentLoaded', () => {
   const historyGrid = document.getElementById('history-grid');
   const noHistoryText = document.getElementById('no-history');
 
+  // Initialize Custom Select Menus
+  setupCustomSelect('model-select', 'model');
+  setupCustomSelect('ratio-select', 'aspect-ratio');
+
+  function setupCustomSelect(containerId, hiddenInputId) {
+    const container = document.getElementById(containerId);
+    const trigger = container.querySelector('.select-trigger');
+    const optionsWrapper = container.querySelector('.select-options');
+    const options = container.querySelectorAll('.select-option');
+    const selectedValue = container.querySelector('.selected-value');
+    const hiddenInput = document.getElementById(hiddenInputId);
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.custom-select').forEach(sel => {
+        if (sel !== container) {
+          sel.classList.remove('active');
+          sel.querySelector('.select-options').classList.add('hidden');
+        }
+      });
+      container.classList.toggle('active');
+      optionsWrapper.classList.toggle('hidden');
+    });
+
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        const val = option.getAttribute('data-value');
+        const text = option.textContent;
+
+        options.forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+
+        selectedValue.textContent = text;
+        hiddenInput.value = val;
+
+        container.classList.remove('active');
+        optionsWrapper.classList.add('hidden');
+      });
+    });
+  }
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.custom-select').forEach(sel => {
+      sel.classList.remove('active');
+      sel.querySelector('.select-options').classList.add('hidden');
+    });
+  });
+
   // History State
   let historyList = JSON.parse(localStorage.getItem('ziploot_ai_gallery')) || [];
 
@@ -59,15 +108,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const seed = seedInput.value ? parseInt(seedInput.value) : Math.floor(Math.random() * 999999999);
     if (!seedInput.value) seedInput.value = seed; // Update UI if seed was blank
 
-    // 1. Determine High-Resolution Image Dimensions based on aspect ratio
-    let width = 1200;
-    let height = 1200;
+    // 1. Determine Ultra-High-Resolution Image Dimensions (for 2MB+ file size)
+    let width = 2400;
+    let height = 2400;
     if (ratio === '16:9') {
-      width = 1600;
-      height = 900;
+      width = 3840;
+      height = 2160;
     } else if (ratio === '9:16') {
-      width = 900;
-      height = 1600;
+      width = 2160;
+      height = 3840;
     }
 
     // 2. Show Loading State
@@ -79,8 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
     generateBtn.style.opacity = '0.7';
     loaderStatus.textContent = 'Contacting AI neural networks...';
 
-    // 3. Construct API URL
-    const encodedPrompt = encodeURIComponent(prompt);
+    // 3. Construct API URL with quality boosters (ensures detailed files and larger sizes)
+    const qualityBoosters = ", ultra-detailed photorealistic 8k raw photography, high-end commercial shot, masterpiece, sharp focus, volumetric lighting";
+    const enhancedPrompt = prompt + qualityBoosters;
+    const encodedPrompt = encodeURIComponent(enhancedPrompt);
     const apiUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&model=${model}&seed=${seed}&nologo=true`;
 
     console.log('Generating AI Image via:', apiUrl);
@@ -176,9 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function loadHistoryItem(index) {
     const item = historyList[index];
     promptInput.value = item.prompt;
-    modelSelect.value = item.model;
-    ratioSelect.value = item.ratio;
     seedInput.value = item.seed;
+
+    // Update custom model select
+    updateCustomSelectValue('model-select', 'model', item.model);
+    // Update custom ratio select
+    updateCustomSelectValue('ratio-select', 'aspect-ratio', item.ratio);
 
     // Set Image direct
     placeholderBox.classList.add('hidden');
@@ -186,6 +240,23 @@ document.addEventListener('DOMContentLoaded', () => {
     resultImg.src = item.url;
     resultImg.classList.remove('hidden');
     actionsPanel.classList.remove('hidden');
+  }
+
+  function updateCustomSelectValue(containerId, hiddenInputId, value) {
+    const container = document.getElementById(containerId);
+    const hiddenInput = document.getElementById(hiddenInputId);
+    const selectedValue = container.querySelector('.selected-value');
+    const options = container.querySelectorAll('.select-option');
+
+    hiddenInput.value = value;
+    options.forEach(opt => {
+      if (opt.getAttribute('data-value') === value) {
+        opt.classList.add('selected');
+        selectedValue.textContent = opt.textContent;
+      } else {
+        opt.classList.remove('selected');
+      }
+    });
   }
 
   // Download Current Image as a direct File

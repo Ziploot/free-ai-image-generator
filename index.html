@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZipLoot - Premium AI Image Generator</title>
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="decor-glow glow-1"></div>
+  <div class="decor-glow glow-2"></div>
+
+  <div class="container">
+    <header class="app-header">
+      <div class="logo">
+        <i data-lucide="sparkles" class="logo-icon"></i>
+        <span>ZipLoot <span class="accent-text">AI</span></span>
+      </div>
+      <p class="tagline">Generate Stunning AI Images for Free without API Keys</p>
+    </header>
+
+    <main class="app-layout">
+      <!-- Input Control Section -->
+      <section class="control-panel glass-card">
+        <h2 class="section-title">
+          <i data-lucide="sliders"></i> Parameters
+        </h2>
+
+        <div class="input-group">
+          <label for="prompt">Describe your image</label>
+          <textarea id="prompt" placeholder="A futuristic cyberpunk city streets glowing in neon purple and cyan, high resolution, realistic digital art..."></textarea>
+        </div>
+
+        <div class="grid-controls">
+          <div class="input-group">
+            <label for="model">AI Model</label>
+            <select id="model">
+              <option value="flux" selected>Flux (Best Quality)</option>
+              <option value="flux-realism">Flux Realism (Photo-Real)</option>
+              <option value="turbo">Turbo (Ultra Fast)</option>
+              <option value="anime">Anime Style</option>
+              <option value="3d-model">3D Render</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="aspect-ratio">Aspect Ratio</label>
+            <select id="aspect-ratio">
+              <option value="1:1" selected>Square (1:1)</option>
+              <option value="16:9">Landscape (16:9)</option>
+              <option value="9:16">Portrait (9:16)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="seed">Seed (Optional)</label>
+          <div class="seed-input-wrapper">
+            <input type="number" id="seed" placeholder="Random seed" />
+            <button id="random-seed-btn" title="Random Seed">
+              <i data-lucide="shuffle"></i>
+            </button>
+          </div>
+        </div>
+
+        <button id="generate-btn" class="primary-btn">
+          <i data-lucide="wand-2" class="btn-icon"></i>
+          <span>Generate Image</span>
+        </button>
+      </section>
+
+      <!-- Preview Section -->
+      <section class="preview-panel glass-card">
+        <h2 class="section-title">
+          <i data-lucide="image"></i> Live Preview
+        </h2>
+
+        <div class="image-viewport">
+          <div class="placeholder-box" id="placeholder">
+            <i data-lucide="image" class="placeholder-icon"></i>
+            <p>Your generated artwork will appear here</p>
+            <span class="sub-text">Enter a prompt and click generate</span>
+          </div>
+
+          <div class="loader-box hidden" id="loader">
+            <div class="spinner"></div>
+            <p id="loader-status">Initializing AI model...</p>
+          </div>
+
+          <img id="result-img" class="result-image hidden" alt="AI Generated Artwork" />
+        </div>
+
+        <div class="preview-actions hidden" id="actions-panel">
+          <button id="download-btn" class="action-btn">
+            <i data-lucide="download"></i> Download JPG
+          </button>
+          <button id="share-btn" class="action-btn secondary">
+            <i data-lucide="share-2"></i> Copy Link
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- History / Gallery Section -->
+    <section class="gallery-section glass-card">
+      <h2 class="section-title">
+        <i data-lucide="history"></i> Prompt History & Gallery
+      </h2>
+      <div class="gallery-grid" id="history-grid">
+        <!-- History items will be dynamically injected here -->
+        <div class="no-history-text" id="no-history">No history yet. Generate an image to see your gallery.</div>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      <p>&copy; 2026 ZipLoot. Powered by <a href="https://pollinations.ai/" target="_blank" rel="noopener">Pollinations AI</a>. Zero-cost deployment.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
